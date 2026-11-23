@@ -5,7 +5,7 @@
 
 ```
 $ python -m pytest -q
-73 passed, 46 xfailed in 10.10s
+73 passed, 46 xfailed in 8.45s
 ```
 
 10 个业务接口 / 121 条用例（119 条默认执行，2 条并发默认跳过）/ 16 条根因级问题（12 个实现缺陷 + 4 个契约空白）。
@@ -50,7 +50,7 @@ D:\parabank\start-parabank.bat
 cd D:\parabank\autotest
 pip install -r requirements.txt
 
-# 3. 跑全量（119 条，约 10 秒）
+# 3. 跑全量（119 条，约 9 秒）
 python -m pytest
 
 # 换环境 / 换 mock 服务
@@ -219,7 +219,7 @@ month=2026-11→ 200 / 7 条
 | 无 CI | 简历写「自动化」却没有流水线 | 待补，或退化成只跑纯函数单测并说明取舍 |
 | 6 项未覆盖 | `transactionId` 负值、`amount` 负数、`month` 空值等 | 探针阶段测过、结论一致，固化的边际收益接近 0 |
 | 金额精度测不了 | 契约 6.6 关心 `.xx12` 这类三分位，种子数据全是 `.xx00` | 要改种子 SQL，属于改被测系统，不做 |
-| 写接口耗时占比高 | 119 条 10 秒，其中 `initializeDB` 占约 85% | 当前规模不值得优化 |
+| 写接口耗时占比高 | 119 条约 9 秒，其中 `initializeDB` 占约 83% | 当前规模不值得优化 |
 
 ## 文档索引
 
