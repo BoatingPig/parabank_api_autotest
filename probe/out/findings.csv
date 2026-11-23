@@ -1,0 +1,27 @@
+﻿finding_id,severity,finding,case_id,endpoint,param,value,expected,actual,evidence
+F001,P0,INJECTION,C064,tx_by_account_month_type,type,0' OR '1'='1,reject（基线 7 条）,200 / 21 条,注入载荷返回 200，结果集超集于基线（21 条 vs 基线 7 条），account_id 过滤被绕过
+F002,P0,SERVER_ERROR,C060,tx_by_account_month_type,type,CREDIT,filter | reject（基线 7 条）,500 / 0 条,500 不是任何输入的合法结果；content_type=text/html，body 4264 字节 —— 根因去 catalina 日志找 bad SQL grammar
+F003,P0,SERVER_ERROR,C061,tx_by_account_month_type,type,credit,filter | reject（基线 7 条）,500 / 0 条,500 不是任何输入的合法结果；content_type=text/html，body 3296 字节 —— 根因去 catalina 日志找 bad SQL grammar
+F004,P0,SERVER_ERROR,C063,tx_by_account_month_type,type,',reject（基线 7 条）,500 / 0 条,500 不是任何输入的合法结果；content_type=text/html，body 3296 字节 —— 根因去 catalina 日志找 bad SQL grammar
+F005,P1,INVALID_ACCEPTED,C055,tx_by_account_month_type,month,',reject（基线 7 条）,200 / 7 条,非法值返回 200，结果全等（7 条）—— 该拒未拒
+F006,P1,INVALID_ACCEPTED,C078,tx_by_account_daterange,fromDate,13-45-2026,reject（基线 5 条）,200 / 0 条,非法值返回 200，结果空（0 条）—— 该拒未拒
+F007,P1,INVALID_ACCEPTED,C079,tx_by_account_daterange,fromDate,02-30-2026,reject（基线 5 条）,200 / 5 条,非法值返回 200，结果全等（5 条）—— 该拒未拒
+F008,P1,INVALID_ACCEPTED,C085,tx_by_account_daterange,toDate,2026-11-11,reject（基线 5 条）,200 / 0 条,非法值返回 200，结果空（0 条）—— 该拒未拒
+F009,P1,INVALID_ACCEPTED,C086,tx_by_account_daterange,toDate,13-45-2026,reject（基线 5 条）,200 / 5 条,非法值返回 200，结果全等（5 条）—— 该拒未拒
+F010,P1,INVALID_ACCEPTED,C087,tx_by_account_daterange,toDate,02-30-2026,reject（基线 5 条）,200 / 0 条,非法值返回 200，结果空（0 条）—— 该拒未拒
+F011,P1,INVALID_ACCEPTED,C088,tx_by_account_daterange,toDate,00-00-0000,reject（基线 5 条）,200 / 0 条,非法值返回 200，结果空（0 条）—— 该拒未拒
+F012,P1,INVALID_ACCEPTED,C102,tx_by_account_ondate,onDate,2026-11-11,reject（基线 2 条）,200 / 0 条,非法值返回 200，结果空（0 条）—— 该拒未拒
+F013,P1,INVALID_ACCEPTED,C103,tx_by_account_ondate,onDate,13-45-2026,reject（基线 2 条）,200 / 0 条,非法值返回 200，结果空（0 条）—— 该拒未拒
+F014,P1,INVALID_ACCEPTED,C104,tx_by_account_ondate,onDate,02-30-2026,reject（基线 2 条）,200 / 0 条,非法值返回 200，结果空（0 条）—— 该拒未拒
+F015,P1,INVALID_ACCEPTED,C105,tx_by_account_ondate,onDate,00-00-0000,reject（基线 2 条）,200 / 0 条,非法值返回 200，结果空（0 条）—— 该拒未拒
+F016,P1,SILENT_IGNORE,C050,tx_by_account_month_type,month,11,filter | reject（基线 7 条）,200 / 7 条,结果与基线逐条相同（7/7 条）—— 过滤条件根本没加进查询，但接口返回 200
+F017,P1,SILENT_IGNORE,C051,tx_by_account_month_type,month,Nov,filter | reject（基线 7 条）,200 / 7 条,结果与基线逐条相同（7/7 条）—— 过滤条件根本没加进查询，但接口返回 200
+F018,P1,SILENT_IGNORE,C052,tx_by_account_month_type,month,nov,filter | reject（基线 7 条）,200 / 7 条,结果与基线逐条相同（7/7 条）—— 过滤条件根本没加进查询，但接口返回 200
+F019,P1,SILENT_IGNORE,C053,tx_by_account_month_type,month,2026-11,filter | reject（基线 7 条）,200 / 7 条,结果与基线逐条相同（7/7 条）—— 过滤条件根本没加进查询，但接口返回 200
+F020,P1,SUPERSET,C077,tx_by_account_daterange,fromDate,2026-11-11,reject（基线 5 条）,200 / 7 条,返回 7 条，比基线多 2 条 —— 过滤条件被削弱（不是没生效，是生效错了方向）
+F021,P1,SUPERSET,C080,tx_by_account_daterange,fromDate,00-00-0000,reject（基线 5 条）,200 / 7 条,返回 7 条，比基线多 2 条 —— 过滤条件被削弱（不是没生效，是生效错了方向）
+F022,P2,CROSS_API_INCONSISTENT,"C002,C011,C020,C038,C066,C091",(多个),(同 kind),0,int 值 '0' 在各接口应同等对待,2xx×4  4xx×2,同一语义的值在 6 个接口上出现 2 种处理：tx_by_id=400/0条; tx_by_account=400/0条; tx_by_account_amount=200/0条; tx_by_account_month_type=200/0条; tx_by_account_daterange=200/0条; tx_by_account_ondate=200/0条
+F023,P2,CROSS_API_INCONSISTENT,"C003,C012,C021,C039,C067,C092",(多个),(同 kind),-1,int 值 '-1' 在各接口应同等对待,2xx×4  4xx×2,同一语义的值在 6 个接口上出现 2 种处理：tx_by_id=400/0条; tx_by_account=400/0条; tx_by_account_amount=200/0条; tx_by_account_month_type=200/0条; tx_by_account_daterange=200/0条; tx_by_account_ondate=200/0条
+F024,P2,CROSS_API_INCONSISTENT,"C004,C013,C022,C040,C068,C093",(多个),(同 kind),1,int 值 '1' 在各接口应同等对待,2xx×4  4xx×2,同一语义的值在 6 个接口上出现 2 种处理：tx_by_id=400/0条; tx_by_account=400/0条; tx_by_account_amount=200/0条; tx_by_account_month_type=200/0条; tx_by_account_daterange=200/0条; tx_by_account_ondate=200/0条
+F025,P2,EQUIV_MISMATCH,"C047,C050,C051,C052,C053",tx_by_account_month_type,month,11月 | 11 | Nov | nov | 2026-11,同一语义必须给同一结果,2 种不同结果,month 语言与格式（11月 vs 11 vs Nov vs nov vs 2026-11）：'11月'=200/5条; '11'=200/7条; 'Nov'=200/7条; 'nov'=200/7条; '2026-11'=200/7条
+F026,P2,EQUIV_MISMATCH,"C057,C061,C060",tx_by_account_month_type,type,Credit | credit | CREDIT,同一语义必须给同一结果,2 种不同结果,type 大小写（Credit vs credit vs CREDIT）：'Credit'=200/1条; 'credit'=500/0条; 'CREDIT'=500/0条

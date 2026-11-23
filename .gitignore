@@ -1,0 +1,19 @@
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# ---------- 探测产物（每次运行可复现，不入库） ----------
+probe_write/out/
+
+# ---------- 过程稿 / 临时脚本 ----------
+_flow/
+
+# ---------- 编辑器 / 系统 ----------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
