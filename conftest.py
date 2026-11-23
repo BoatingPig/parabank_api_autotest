@@ -33,7 +33,7 @@ def base_url(request) -> str:
 @pytest.fixture(scope="session")
 def client(base_url) -> HttpClient:
     c = HttpClient(base_url)
-    # 环境自检：连不上就直接失败，不要让 30 条用例各报一次连不上
+    # 环境自检：连不上就直接失败，不要让 119 条用例各报一次连不上
     resp = c.get("/accounts/12345")
     if resp.status_code == 0 or not resp.text:
         pytest.exit(f"ParaBank 未启动或不可达: {base_url}\n请先运行 D:\\parabank\\start-parabank.bat", returncode=1)
